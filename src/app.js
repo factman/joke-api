@@ -9,14 +9,33 @@
 const express = require('express');
 const jsonParser = require('body-parser').json;
 const logger = require('morgan');
+const mongoose = require('mongoose');
 const routes = require('./routes/routes');
 const { errorHandler } = require('./controllers/jokeController');
 const { getError } = require('./helpers/validations');
+
 // defining the express app
 const app = express();
 
+// creating connection to database
+mongoose.connect('mongodb://localhost:27017/joke');
+
+// save connection object
+const db = mongoose.connection;
+
+// database error event listener
+db.on('error', (err) => {
+  console.log('error connecting to database', err);
+});
+
+// database open event listener
+db.once('open', () => {
+  console.log('db connected successfully');
+});
+
 // logger middleware implementation
 app.use(logger('dev'));
+
 // json parser middleware implementation
 app.use(jsonParser());
 

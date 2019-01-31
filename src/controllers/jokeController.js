@@ -3,6 +3,8 @@
  * @author Mohammed Odunayo <factman60ATgmail.com>
  */
 
+const { Joke } = require('../models/jokeModel');
+
 module.exports = {
   /**
    * @description Handle all errors and respond with error message and status code
