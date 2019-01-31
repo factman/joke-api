@@ -1,11 +1,101 @@
+/* eslint-disable consistent-return */
 /**
  * @package Healthera Jokes API Joke Controller
  * @author Mohammed Odunayo <factman60ATgmail.com>
  */
 
 const { Joke } = require('../models/jokeModel');
+const { validateJokes, getError } = require('../helpers/validations');
 
 module.exports = {
+  /**
+   * @description Return Specified Joke Via id parameter
+   */
+  getJokeByIdParam: (req, res, next, id) => {
+    Joke.findById(id, (err, joke) => {
+      if (err) return next(err);
+      if (!joke) return next(getError('Not Found', 404));
+      req.joke = joke;
+      return next();
+    });
+  },
+
+  /**
+   * @description Return jokes from database
+   */
+  getJokes: (req, res, next) => {
+    Joke.find({})
+      .sort({ createdAt: -1, likes: -1 })
+      .exec((err, jokes) => {
+        if (err) return next(err);
+        res.json({
+          success: true,
+          data: jokes,
+          message: 'Jokes returned successfully.',
+        });
+        return next();
+      });
+  },
+
+  /**
+   * @description Create a Joke or Jokes
+   */
+  createJokes: (req, res, next) => {
+    const jokes = req.body;
+    if (validateJokes(jokes)) {
+      Joke.insertMany(jokes, (err, jokesArray) => {
+        if (err) return next(err);
+        res.status(201)
+          .json({
+            success: true,
+            data: jokesArray,
+            message: 'Jokes created successfully.',
+          });
+        return next();
+      });
+    } else {
+      next(getError('Invalid joke objects, "joke is required".', 500));
+    }
+  },
+
+  /**
+   * @description Return a specific joke from database
+   */
+  getJokeById: (req, res) => {
+    res.json({
+      success: true,
+      data: req.joke,
+      message: 'Joke returned successfully.',
+    });
+  },
+
+  /**
+   * @description Edit a specific Joke
+   */
+  editJoke: (req, res, next) => {
+    if (validateJokes([req.body])) {
+      const joke = { 
+        title: req.body.title || req.joke.title,
+        category: req.body.category || req.joke.category,
+        joke: req.body.joke || req.joke.joke,
+        updatedAt: new Date(),
+      };
+      Joke.findOneAndUpdate(
+        { id: req.param.id }, joke, { new: true, runValidators: true },
+        (err, jokeObject) => {
+          if (err) return next(err);
+          res.json({
+            success: true,
+            data: jokeObject,
+            message: 'Joke edited successfully.',
+          });
+        },
+      );
+    } else {
+      return next(getError('Invalid joke objects, "joke is required".', 500));
+    }
+  },
+
   /**
    * @description Handle all errors and respond with error message and status code
    */
@@ -16,5 +106,6 @@ module.exports = {
         message: err.message,
       },
     });
+    next();
   },
 };

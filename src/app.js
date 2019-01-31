@@ -18,7 +18,7 @@ const { getError } = require('./helpers/validations');
 const app = express();
 
 // creating connection to database
-mongoose.connect('mongodb://localhost:27017/joke');
+mongoose.connect('mongodb://localhost:27017/joke', { useNewUrlParser: true });
 
 // save connection object
 const db = mongoose.connection;

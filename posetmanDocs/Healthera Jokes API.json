@@ -1,0 +1,430 @@
+{
+	"info": {
+		"_postman_id": "05d3a567-038c-40bd-8638-3afd2bdc0566",
+		"name": "Healthera Jokes API",
+		"description": "# Healthera Joke API\n\n### Interview Test for Mohammed Odunayo <factman60@gmail.com>\n\nThe Healthera Jokes module is one of the most popular features on the app, there are patients tapping for jokes for hours when they’re not taking their medicines. Right now, the repository is very minimalistic, and system admin have to update the CSV in order to update the jokes; not very easy to manage! The challenge for you is to extend the Jokes module, it’s open-ended, try to make our admin’s life easier!\n",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Welcome",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/api",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api"
+					]
+				},
+				"description": "Return a welcome message."
+			},
+			"response": []
+		},
+		{
+			"name": "Create Jokes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t{\n\t\t\"title\": \"Joke Title\",\n\t\t\"joke\": \"Joke Content\",\n\t\t\"category\": \"Funny Joke\"\n\t}\n]"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/jokes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"jokes"
+					]
+				},
+				"description": "Create a joke or jokes."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Jokes",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/jokes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"jokes"
+					]
+				},
+				"description": "Return all the jokes."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Joke",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/jokes/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"jokes",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1",
+							"description": "Joke id"
+						}
+					]
+				},
+				"description": "Return a specific joke."
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Joke",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\": \"Joke Title\",\n\t\"joke\": \"Joke Content\",\n\t\"category\": \"Funny Joke\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/jokes/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"jokes",
+						":id"
+					],
+					"variable": [
+						{
+							"description": "Joke id",
+							"key": "id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Edit a specific joke."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Joke",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/jokes/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"jokes",
+						":id"
+					],
+					"variable": [
+						{
+							"description": "Joke id",
+							"key": "id",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Delete a specific joke."
+			},
+			"response": []
+		},
+		{
+			"name": "Rate Joke",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/jokes/:id/funny",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"jokes",
+						":id",
+						"funny"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1",
+							"description": "Joke id"
+						}
+					]
+				},
+				"description": "Rate a specific joke as funny."
+			},
+			"response": []
+		},
+		{
+			"name": "Import Jokes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "",
+							"description": "Joke file",
+							"type": "file",
+							"src": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/jokes/import/:type",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"jokes",
+						"import",
+						":type"
+					],
+					"variable": [
+						{
+							"key": "type",
+							"value": "JSON",
+							"description": "File type"
+						}
+					]
+				},
+				"description": "Import jokes from a CSV or JSON file."
+			},
+			"response": []
+		},
+		{
+			"name": "Export Jokes",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/jokes/export/:type",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"jokes",
+						"export",
+						":type"
+					],
+					"variable": [
+						{
+							"key": "type",
+							"value": "JSON",
+							"description": "Content type"
+						}
+					]
+				},
+				"description": "Export Jokes as CSV or JSON"
+			},
+			"response": []
+		},
+		{
+			"name": "Filter Jokes",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/jokes/filter/:category",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"jokes",
+						"filter",
+						":category"
+					],
+					"variable": [
+						{
+							"key": "category",
+							"value": "generic",
+							"description": "Joke category"
+						}
+					]
+				},
+				"description": "Filter jokes by category."
+			},
+			"response": []
+		},
+		{
+			"name": "Search Jokes",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/jokes/search/:keywords",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"jokes",
+						"search",
+						":keywords"
+					],
+					"variable": [
+						{
+							"key": "keywords",
+							"value": "funny jokes",
+							"description": "Search keywords"
+						}
+					]
+				},
+				"description": "Search jokes matching the specified keyword."
+			},
+			"response": []
+		}
+	]
+}

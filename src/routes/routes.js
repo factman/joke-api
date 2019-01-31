@@ -4,10 +4,22 @@
  */
 
 const express = require('express');
-const { validateId, validateFileType } = require('../helpers/validations');
+const { validateFileType } = require('../helpers/validations');
+const {
+  getJokes,
+  createJokes,
+  getJokeById,
+  getJokeByIdParam,
+  editJoke,
+} = require('../controllers/jokeController');
 
 const router = express.Router();
 const version = process.env.VERSION || '1.0.0';
+
+/**
+ * @description Get Joke object when :id is present in the route
+ */
+router.param('id', getJokeByIdParam);
 
 /**
  * GET /api
@@ -25,55 +37,31 @@ router.get('/', (req, res) => {
  * GET /api/jokes
  * @description Return all the jokes.
  */
-router.get('/jokes', (req, res) => {
-  res.json({
-    success: true,
-    data: [],
-    message: 'Jokes returned successfully.',
-  });
-});
+router.get('/jokes', getJokes);
 
 /**
  * POST /api/jokes
  * @description Create a joke or multiple jokes.
  */
-router.post('/jokes', (req, res) => {
-  res.status(201).json({
-    success: true,
-    data: [],
-    message: 'Jokes created successfully.',
-  });
-});
+router.post('/jokes', createJokes);
 
 /**
  * GET /api/jokes/:id
  * @description Return a specific joke.
  */
-router.get('/jokes/:id', validateId, (req, res) => {
-  res.json({
-    success: true,
-    data: {},
-    message: 'Joke returned successfully.',
-  });
-});
+router.get('/jokes/:id', getJokeById);
 
 /**
  * PUT /api/jokes/:id
  * @description Edit a specific joke.
  */
-router.put('/jokes/:id', validateId, (req, res) => {
-  res.json({
-    success: true,
-    data: {},
-    message: 'Joke edited successfully.',
-  });
-});
+router.put('/jokes/:id', editJoke);
 
 /**
  * DELETE /api/jokes/:id
  * @description Delete a specific joke.
  */
-router.delete('/jokes/:id', validateId, (req, res) => {
+router.delete('/jokes/:id', (req, res) => {
   res.json({
     success: true,
     data: null,
@@ -85,11 +73,11 @@ router.delete('/jokes/:id', validateId, (req, res) => {
  * POST /api/jokes/:id/funny
  * @description Rate a specific joke as funny.
  */
-router.post('/jokes/:id/funny', validateId, (req, res) => {
+router.post('/jokes/:id/like', (req, res) => {
   res.json({
     success: true,
     data: {},
-    message: 'This joke is funny.',
+    message: 'Joke liked.',
   });
 });
 

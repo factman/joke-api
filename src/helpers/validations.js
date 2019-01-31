@@ -16,17 +16,16 @@ const getError = (message, status) => {
 };
 
 module.exports = {
-  getError,
-  /**
-   * @description Validate an id parameter if a string or number is passed
-   */
-  validateId: (req, res, next) => {
-    if (!Number(req.params.id)) {
-      next(getError('Not Found', 404));
-    } else {
-      next();
-    }
+  validateJokes: (jokes) => {
+    let jokesStatus = true;
+    jokes.forEach((joke) => {
+      if ((!joke.joke) && (joke.joke.length < 1)) {
+        jokesStatus = false;
+      }
+    });
+    return jokesStatus;
   },
+  getError,
   /**
    * @description Validate file type parameter if it's equal to CSV or JSON
    */
