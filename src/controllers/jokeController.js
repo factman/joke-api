@@ -95,6 +95,57 @@ module.exports = {
       return next(getError('Invalid joke objects, "joke is required".', 500));
     }
   },
+  
+  /**
+   * @description Delete a specific Joke
+   */
+  deleteJoke: (req, res, next) => {
+    Joke.findOneAndDelete(
+      { id: req.param.id }, (err) => {
+        if (err) return next(err, data);
+        res.json({
+          success: true,
+          data: data,
+          message: 'Joke deleted successfully.',
+        });
+        return next();
+      });
+  },
+  
+  /**
+   * @description Like a specific Joke
+   */
+  likeJoke: (req, res, next) => {
+    req.joke.like += 1;
+    Joke.findOneAndUpdate(
+      { id: req.param.id }, req.joke, { new: true, runValidators: true },
+      (err, jokeObject) => {
+        if (err) return next(err);
+        res.json({
+          success: true,
+          data: jokeObject,
+          message: 'Joke liked.',
+        });
+      },
+    );
+  },
+  
+  /**
+   * @description Filter jokes by category
+   */
+  filterJokesByCategory: (req, res, next) => {
+    Joke.find({ category: req.param.category })
+      .sort({ createdAt: -1, likes: -1 })
+      .exec((err, jokes) => {
+        if (err) return next(err);
+        res.json({
+          success: true,
+          data: jokes,
+          message: 'Filtered Jokes returned successfully.',
+        });
+        return next();
+      });
+  }
 
   /**
    * @description Handle all errors and respond with error message and status code

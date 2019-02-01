@@ -11,6 +11,9 @@ const {
   getJokeById,
   getJokeByIdParam,
   editJoke,
+  deleteJoke,
+  likeJoke,
+  filterJokesByCategory,
 } = require('../controllers/jokeController');
 
 const router = express.Router();
@@ -61,25 +64,13 @@ router.put('/jokes/:id', editJoke);
  * DELETE /api/jokes/:id
  * @description Delete a specific joke.
  */
-router.delete('/jokes/:id', (req, res) => {
-  res.json({
-    success: true,
-    data: null,
-    message: 'Joke deleted successfully.',
-  });
-});
+router.delete('/jokes/:id', deleteJoke);
 
 /**
  * POST /api/jokes/:id/funny
- * @description Rate a specific joke as funny.
+ * @description Like a specific joke.
  */
-router.post('/jokes/:id/like', (req, res) => {
-  res.json({
-    success: true,
-    data: {},
-    message: 'Joke liked.',
-  });
-});
+router.post('/jokes/:id/like', likeJoke);
 
 /**
  * POST /api/jokes/import/:type
@@ -109,13 +100,7 @@ router.get('/jokes/export/:type', validateFileType, (req, res) => {
  * GET /api/jokes/filter/:category
  * @description Filter Jokes by category.
  */
-router.get('/jokes/filter/:category', (req, res) => {
-  res.json({
-    success: true,
-    data: [],
-    message: 'Filtered Jokes returned successfully.',
-  });
-});
+router.get('/jokes/filter/:category', filterJokesByCategory);
 
 /**
  * GET /api/jokes/search/:keywords
