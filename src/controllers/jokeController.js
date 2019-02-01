@@ -7,7 +7,21 @@
 const { Joke } = require('../models/jokeModel');
 const { validateJokes, getError } = require('../helpers/validations');
 
+const version = process.env.VERSION || '1.0.0';
+
 module.exports = {
+
+   /**
+   * @description Return welcome message
+   */
+   welcome: (req, res) => {
+    res.json(
+      {
+        message: `Welcome to Healthera Jokes API (version ${version})`,
+      },
+    );
+  },
+   
   /**
    * @description Return Specified Joke Via id parameter
    */

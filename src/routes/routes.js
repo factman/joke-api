@@ -6,6 +6,7 @@
 const express = require('express');
 const { validateFileType } = require('../helpers/validations');
 const {
+  welcome,
   getJokes,
   createJokes,
   getJokeById,
@@ -17,7 +18,6 @@ const {
 } = require('../controllers/jokeController');
 
 const router = express.Router();
-const version = process.env.VERSION || '1.0.0';
 
 /**
  * @description Get Joke object when :id is present in the route
@@ -28,13 +28,7 @@ router.param('id', getJokeByIdParam);
  * GET /api
  * @description Return API name and version.
  */
-router.get('/', (req, res) => {
-  res.json(
-    {
-      message: `Welcome to Healthera Jokes API (version ${version})`,
-    },
-  );
-});
+router.get('/', welcome);
 
 /**
  * GET /api/jokes
