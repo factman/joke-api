@@ -145,7 +145,7 @@ module.exports = {
         });
         return next();
       });
-  }
+  },
 
   /**
    * @description Handle all errors and respond with error message and status code
