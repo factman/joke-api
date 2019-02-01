@@ -39,6 +39,12 @@ app.use(logger('dev'));
 // json parser middleware implementation
 app.use(jsonParser());
 
+/**
+ * GET /api
+ * @description API route middleware.
+ */
+app.use('/api', routes);
+
 // welcome page
 app.use('/', (req, res) => {
   res.end(`
@@ -72,12 +78,6 @@ app.use('/', (req, res) => {
     </html>
   `);
 });
-
-/**
- * GET /api
- * @description API route middleware.
- */
-app.use('/api', routes);
 
 /**
  * @description catch 404 error and forward to error handler.
