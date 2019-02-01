@@ -15,11 +15,36 @@ module.exports = {
    * @description Return welcome message
    */
    welcome: (req, res) => {
-    res.json(
-      {
-        message: `Welcome to Healthera Jokes API (version ${version})`,
-      },
-    );
+    res.end(`
+    <!DOCTYPE html>
+    <html>
+     <head>
+       <title>Healthera Jokes API</title>
+     </head>
+     <body>
+       <h1>Healthera Jokes API ${version}</h1>
+       <h3>
+         Interview Test for Mohammed Odunayo <i>factman60@gmail.com</i>
+       </h3>
+       <p>Entry Routes:</p>
+       <ul>
+         <li>
+           <a href="https://health-jokes-api.herokuapp.com/api">
+             api - Api entry point
+           </a>
+         </li>
+         <li>
+           <a href="https://health-jokes-api.herokuapp.com/api/jokes">
+             api/jokes - Returns Jokes
+           </a>
+         </li>
+         <li>
+           <code>...</code>
+         </li>
+       </ul>
+     </body>
+    </html>
+  `);
   },
    
   /**

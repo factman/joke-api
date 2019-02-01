@@ -45,40 +45,6 @@ app.use(jsonParser());
  */
 app.use('/api', routes);
 
-// welcome page
-app.use('/', (req, res) => {
-  res.end(`
-    <!DOCTYPE html>
-    <html>
-     <head>
-       <title>Healthera Jokes API</title>
-     </head>
-     <body>
-       <h1>Healthera Jokes API</h1>
-       <h3>
-         Interview Test for Mohammed Odunayo <i>factman60@gmail.com</i>
-       </h3>
-       <p>Entry Routes:</p>
-       <ul>
-         <li>
-           <a href="https://health-jokes-api.herokuapp.com/api">
-             api - Api entry point
-           </a>
-         </li>
-         <li>
-           <a href="https://health-jokes-api.herokuapp.com/api/jokes">
-             api/jokes - Returns Jokes
-           </a>
-         </li>
-         <li>
-           <code>...</code>
-         </li>
-       </ul>
-     </body>
-    </html>
-  `);
-});
-
 /**
  * @description catch 404 error and forward to error handler.
  */
