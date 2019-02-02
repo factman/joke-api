@@ -104,6 +104,42 @@
 			"response": []
 		},
 		{
+			"name": "Get Jokes Categories",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/jokes/categories",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"jokes",
+						"categories"
+					]
+				},
+				"description": "Return all joke categories."
+			},
+			"response": []
+		},
+		{
 			"name": "Get Joke",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -137,7 +173,7 @@
 					"variable": [
 						{
 							"key": "id",
-							"value": "1",
+							"value": "5c54e7b5abce5b3842ee4b6e",
 							"description": "Joke id"
 						}
 					]
@@ -160,7 +196,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"title\": \"Joke Title\",\n\t\"joke\": \"Joke Content\",\n\t\"category\": \"Funny Joke\"\n}"
+					"raw": "{\n\t\"title\": \"Joke Title\",\n\t\"joke\": \"Joke Content\",\n\t\"category\": \"Generic\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:5000/api/jokes/:id",
@@ -178,7 +214,7 @@
 						{
 							"description": "Joke id",
 							"key": "id",
-							"value": "1"
+							"value": "5c54e7b5abce5b3842ee4b6e"
 						}
 					]
 				},
@@ -218,7 +254,7 @@
 						{
 							"description": "Joke id",
 							"key": "id",
-							"value": "1"
+							"value": "5c54e04898d35a32549d3462"
 						}
 					]
 				},
@@ -227,7 +263,7 @@
 			"response": []
 		},
 		{
-			"name": "Rate Joke",
+			"name": "Like Joke",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -236,7 +272,7 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:5000/api/jokes/:id/funny",
+					"raw": "http://localhost:5000/api/jokes/:id/like",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -246,17 +282,17 @@
 						"api",
 						"jokes",
 						":id",
-						"funny"
+						"like"
 					],
 					"variable": [
 						{
+							"description": "Joke id",
 							"key": "id",
-							"value": "1",
-							"description": "Joke id"
+							"value": "5c54e7b5abce5b3842ee4b6e"
 						}
 					]
 				},
-				"description": "Rate a specific joke as funny."
+				"description": "Like a specific joke."
 			},
 			"response": []
 		},
@@ -273,15 +309,8 @@
 					}
 				],
 				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "",
-							"description": "Joke file",
-							"type": "file",
-							"src": ""
-						}
-					]
+					"mode": "raw",
+					"raw": "[\"\\\"Title\\\"|\\\"Joke\\\"|\\\"Category\\\"|\\\"Likes\\\"\\n\\\"A BEAR WALKS INTO A BAR...\\\"|\\\"A bear walks into a bar and says to the bartender, \\\"I'll have a pint of beer and a.......... packet of peanuts.\\\" The bartender asks, \\\"Why the big pause?\\\"\\\"|\\\"ANIMAL\\\"|\\\"0\\\"\\n\\\"JOLLY SANTA\\\"|\\\"Q: Why is Santa always so jolly? A: He knows where all the bad girls live.\\\"|\\\"MISCELLANEOUS\\\"|\\\"0\\\"\\n\\\"GEEK BOOTY CALL... DROID\\\"|\\\"Are you the droid I'm looking for?\\\"|\\\"DIRTY\\\"|\\\"0\\\"\\n\\\"WHY DO SCOTSMEN WEAR KILTS?\\\"|\\\"Q: Why do Scotsmen wear kilts? A: Because the sound of zippers scare the sheep away.\\\"|\\\"ANIMAL\\\"|\\\"0\\\"\\n\\\"CHILLIN' BIDDIES\\\"|\\\"Three old ladies were sitting on a park bench, and a man jumped out of the bushes and flashed them. The first lady had a stroke, the second lady had a stroke, and the third lady's arm was too short to reach.\\\"|\\\"DIRTY\\\"|\\\"0\\\"\\n\\\"OLDEST LIVING PERSON DIES\\\"|\\\"I was reading in the celebrity obituary column. It said the Guinness Book of World Records' oldest living person had died. Carrie White died at the age of 118 years old. Last line of the obituary said, and I quote, 'Cause of death has not yet been determined.' Let me take a wild stab in the dark on this one -- probably not crib death.\\\"|\\\"DARK HUMOR\\\"|\\\"0\\\"\\n\\\"TOOTH FAIRY VISIT\\\"|\\\"When I was five years old, I lost my two front teeths, and I put them under my pillow for the tooth fairy. And the next morning when I woke up, to my surprise, under my pillow, I found a joint.\\\"|\\\"KIDS\\\"|\\\"0\\\"\\n\\\"DIVORCE & CIRCUMCISION\\\"|\\\"Q: What's the difference between a divorce and a circumcision? A: In a divorce, you get rid of the whole schmuck.\\\"|\\\"DOCTOR\\\"|\\\"0\\\"\\n\\\"DEAF CHILD SIGN\\\"|\\\"The neighborhood I grew up in had a sign that said, 'Go Slow -- Deaf Child'... Nowadays, I drive by that sign and all I can think is, 'When is this deaf kid gonna get his act together and move out of his parents' house?'\\\"|\\\"INSULTS\\\"|\\\"0\\\"\\n\\\"DOWN WITH O.P.P.\\\"|\\\"I know a lady who blew her man's jimmy off because he wanted to be down with O.P.P. Now he down with No P.P.\\\"|\\\"DARK HUMOR\\\"|\\\"0\\\"\"]"
 				},
 				"url": {
 					"raw": "http://localhost:5000/api/jokes/import/:type",
@@ -299,7 +328,7 @@
 					"variable": [
 						{
 							"key": "type",
-							"value": "JSON",
+							"value": "CSV",
 							"description": "File type"
 						}
 					]
@@ -343,7 +372,7 @@
 					"variable": [
 						{
 							"key": "type",
-							"value": "JSON",
+							"value": "CSV",
 							"description": "Content type"
 						}
 					]
@@ -380,7 +409,7 @@
 					"variable": [
 						{
 							"key": "category",
-							"value": "generic",
+							"value": "DIRTY",
 							"description": "Joke category"
 						}
 					]
@@ -417,12 +446,44 @@
 					"variable": [
 						{
 							"key": "keywords",
-							"value": "funny jokes",
-							"description": "Search keywords"
+							"value": "look the",
+							"description": "Search+keywords"
 						}
 					]
 				},
 				"description": "Search jokes matching the specified keyword."
+			},
+			"response": []
+		},
+		{
+			"name": "Reset Joke Database",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:5000/api/jokes/reset",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"jokes",
+						"reset"
+					]
+				},
+				"description": "Delete all jokes and initialize with default jokes."
 			},
 			"response": []
 		}

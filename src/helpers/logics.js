@@ -47,4 +47,38 @@ module.exports = {
       next();
     }
   },
+
+  /**
+   * @description Return CSV formatted String
+   * @param {Array} jokes Array of jokes
+   */
+  convertToCSV: (jokes) => {
+    const CSV = ['"Title"|"Joke"|"Category"|"Likes"'];
+    jokes.forEach((joke) => {
+      CSV.push(`"${joke.title}"|"${joke.joke}"|"${joke.category}"|"${joke.likes}"`);
+    });
+    // eslint-disable-next-line quotes
+    return CSV.join("\n");
+  },
+
+  /**
+   * @description Return array of Objects
+   * @param {string} CSV CSV string
+   */
+  convertToJSON: (CSV) => {
+    const obj = [];
+    // eslint-disable-next-line quotes
+    const CSVLines = CSV[0].split("\n");
+    CSVLines.shift();
+    CSVLines.forEach((jokeString) => {
+      const jokeData = jokeString.split('|');
+      obj.push({
+        title: jokeData[0].substr(1, (jokeData[0].length - 2)),
+        joke: jokeData[1].substr(1, (jokeData[1].length - 2)),
+        category: jokeData[2].substr(1, (jokeData[2].length - 2)),
+        likes: jokeData[3].substr(1, (jokeData[3].length - 2)),
+      });
+    });
+    return obj;
+  },
 };

@@ -4,8 +4,9 @@
  * @author Mohammed Odunayo <factman60ATgmail.com>
  */
 
+const fs = require('fs');
 const { Joke } = require('../models/jokeModel');
-const { validateJokes, getError } = require('../helpers/logics');
+const { validateJokes, getError, convertToCSV, convertToJSON } = require('../helpers/logics');
 const initialJokes = require('../../jokes.json');
 
 const version = process.env.VERSION || '1.0.0';
@@ -16,34 +17,8 @@ module.exports = {
    * @description Return welcome message
    */
   welcome: (req, res) => {
-    res.end(`
-    <!DOCTYPE html>
-    <html>
-     <head>
-       <title>Healthera Jokes API</title>
-     </head>
-     <body>
-       <h1>Healthera Jokes API ${version}</h1>
-       <h3>
-         Interview Test for Mohammed Odunayo <i>factman60@gmail.com</i>
-       </h3>
-       <p>Entry Routes:</p>
-       <ul>
-         <li>
-           <b>(POST)</b> /api/reset - Reset and initialize database
-         </li>
-         <li>
-           <a href="https://health-jokes-api.herokuapp.com/api/jokes">
-             <b>(GET)</b> /api/jokes - Returns all jokes
-           </a>
-         </li>
-         <li>
-           <code>...</code>
-         </li>
-       </ul>
-     </body>
-    </html>
-  `);
+    const file = fs.readFileSync('welcome.html', 'utf8');
+    res.end(file.replace('{{version}}', version));
   },
 
   /**
@@ -70,6 +45,37 @@ module.exports = {
           success: true,
           data: jokes,
           message: 'Jokes returned successfully.',
+        });
+      });
+  },
+
+  /**
+   * @description Return joke categories
+   */
+  getJokeCategories: (req, res, next) => {
+    Joke.find({}, 'category')
+      .exec((err, categories) => {
+        if (err) return next(err);
+        const distinctCategories = [];
+        const redundantCategories = [];
+        const result = [];
+        categories.forEach((category) => {
+          if (!distinctCategories.includes(category.category)) {
+            distinctCategories.push(category.category);
+          }
+          redundantCategories.push(category.category);
+        });
+        distinctCategories.forEach((name) => {
+          let count = 0;
+          redundantCategories.forEach((redundantName) => {
+            if (redundantName === name) count += 1;
+          });
+          result.push({ name, count });
+        });
+        res.json({
+          success: true,
+          data: result,
+          message: 'Categories returned successfully.',
         });
       });
   },
@@ -198,18 +204,52 @@ module.exports = {
    * @description Searching for jokes
    */
   searchJokes: (req, res, next) => {
-    const query = req.params.keywords.split(' ').join('|');
-    Joke.find()
-      .where({ joke: new RegExp(query, 'gim') })
-      .or([{ title: new RegExp(query, 'gim') }, { category: new RegExp(query, 'gim') }])
+    const query = req.params.keywords.split(' ').join(')(?=.*');
+    Joke.find({ joke: new RegExp(`(?=.*${query})`, 'i') })
       .exec((err, jokes) => {
-      if (err) return next(err);
-      res.json({
-        success: true,
-        data: jokes,
-        message: 'Matched Jokes returned successfully.',
+        if (err) return next(err);
+        res.json({
+          success: true,
+          data: jokes,
+          message: 'Matched Jokes returned successfully.',
+        });
       });
-    });
+  },
+
+  /**
+   * @description Import jokes as JSON | CSV
+   */
+  importJokes: (req, res, next) => {
+    const jokes = (req.params.type === 'JSON') ? req.body : convertToJSON(req.body);
+    if (validateJokes(jokes)) {
+      Joke.insertMany(jokes, (err, jokesArray) => {
+        if (err) return next(err);
+        res.status(201)
+          .json({
+            success: true,
+            data: jokesArray,
+            message: 'Jokes created successfully.',
+          });
+      });
+    } else {
+      next(getError('Invalid joke objects, "joke is required".', 500));
+    }
+  },
+
+  /**
+   * @description Export jokes as JSON | CSV
+   */
+  exportJokes: (req, res, next) => {
+    Joke.find({})
+      .sort({ createdAt: 1 })
+      .exec((err, jokes) => {
+        if (err) return next(err);
+        res.json({
+          success: true,
+          data: (req.params.type === 'JSON') ? jokes : convertToCSV(jokes),
+          message: 'Jokes returned successfully.',
+        });
+      });
   },
 
   /**

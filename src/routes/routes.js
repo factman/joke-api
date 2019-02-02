@@ -17,6 +17,9 @@ const {
   filterJokesByCategory,
   resetDatabase,
   searchJokes,
+  getJokeCategories,
+  exportJokes,
+  importJokes,
 } = require('../controllers/jokeController');
 
 const router = express.Router();
@@ -45,10 +48,16 @@ router.get('/jokes', getJokes);
 router.post('/jokes', createJokes);
 
 /**
- * POST /api/jokes
+ * POST /api/jokes/reset
  * @description Clear database and reset documents jokes.
  */
 router.post('/jokes/reset', resetDatabase);
+
+/**
+ * GET /api/jokes/categories
+ * @description Return joke categories.
+ */
+router.get('/jokes/categories', getJokeCategories);
 
 /**
  * GET /api/jokes/:id
@@ -78,25 +87,13 @@ router.post('/jokes/:id/like', likeJoke);
  * POST /api/jokes/import/:type
  * @description Import Jokes from a CSV or JSON file.
  */
-router.post('/jokes/import/:type', validateFileType, (req, res) => {
-  res.status(201).json({
-    success: true,
-    data: [],
-    message: 'Jokes imported successfully.',
-  });
-});
+router.post('/jokes/import/:type', validateFileType, importJokes);
 
 /**
  * GET /api/jokes/export/:type
  * @description Export Jokes as CSV or JSON.
  */
-router.get('/jokes/export/:type', validateFileType, (req, res) => {
-  res.json({
-    success: true,
-    data: '',
-    message: 'Jokes exported successfully.',
-  });
-});
+router.get('/jokes/export/:type', validateFileType, exportJokes);
 
 /**
  * GET /api/jokes/filter/:category
