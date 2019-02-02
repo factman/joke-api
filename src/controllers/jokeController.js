@@ -30,13 +30,11 @@ module.exports = {
        <p>Entry Routes:</p>
        <ul>
          <li>
-           <a href="https://health-jokes-api.herokuapp.com/api">
-             api - Api entry point
-           </a>
+           <b>(POST)</b> /api/reset - Reset and initialize database
          </li>
          <li>
            <a href="https://health-jokes-api.herokuapp.com/api/jokes">
-             api/jokes - Returns Jokes
+             <b>(GET)</b> /api/jokes - Returns all jokes
            </a>
          </li>
          <li>
@@ -117,7 +115,7 @@ module.exports = {
         category: req.body.category || req.joke.category,
         joke: req.body.joke || req.joke.joke,
       };
-      req.joke.update(req.joke, joke, (err, editedJoke) => {
+      req.joke.update(joke, (err, editedJoke) => {
         if (err) return next(err);
         res.json({
           success: true,
@@ -151,7 +149,7 @@ module.exports = {
     const joke = {
       likes: req.joke.likes + 1,
     };
-    req.joke.update(req.joke, joke, (err, updatedJoke) => {
+    req.joke.update(joke, (err, updatedJoke) => {
       if (err) return next(err);
       res.json({
         success: true,
@@ -200,7 +198,11 @@ module.exports = {
    * @description Searching for jokes
    */
   searchJokes: (req, res, next) => {
-    Joke.find({ $text: { $search: req.params.keywords } }, (err, jokes) => {
+    const query = req.params.keywords.split(' ').join('|');
+    Joke.find()
+      .where({ joke: new RegExp(query, 'gim') })
+      .or([{ title: new RegExp(query, 'gim') }, { category: new RegExp(query, 'gim') }])
+      .exec((err, jokes) => {
       if (err) return next(err);
       res.json({
         success: true,

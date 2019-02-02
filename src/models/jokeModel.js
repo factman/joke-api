@@ -19,15 +19,9 @@ const JokeSchema = new Schema({
   updatedAt: { type: Date, default: Date.now },
 });
 
-JokeSchema.index({
-  title: 'text',
-  joke: 'text',
-  category: 'text',
-});
-
-JokeSchema.methods.update = ($this, updates, callback) => {
-  Object.assign($this, updates, { updatedAt: new Date() });
-  $this.save(callback);
+JokeSchema.methods.update = function(updates, callback) {
+  Object.assign(this, updates, { updatedAt: new Date() });
+  this.save(callback);
 };
 
 // Creating the Joke model
