@@ -5,16 +5,17 @@
  */
 
 const { Joke } = require('../models/jokeModel');
-const { validateJokes, getError } = require('../helpers/validations');
+const { validateJokes, getError } = require('../helpers/logics');
+const initialJokes = require('../../jokes.json');
 
 const version = process.env.VERSION || '1.0.0';
 
 module.exports = {
 
-   /**
+  /**
    * @description Return welcome message
    */
-   welcome: (req, res) => {
+  welcome: (req, res) => {
     res.end(`
     <!DOCTYPE html>
     <html>
@@ -46,7 +47,7 @@ module.exports = {
     </html>
   `);
   },
-   
+
   /**
    * @description Return Specified Joke Via id parameter
    */
@@ -72,7 +73,6 @@ module.exports = {
           data: jokes,
           message: 'Jokes returned successfully.',
         });
-        return next();
       });
   },
 
@@ -90,7 +90,6 @@ module.exports = {
             data: jokesArray,
             message: 'Jokes created successfully.',
           });
-        return next();
       });
     } else {
       next(getError('Invalid joke objects, "joke is required".', 500));
@@ -113,67 +112,61 @@ module.exports = {
    */
   editJoke: (req, res, next) => {
     if (validateJokes([req.body])) {
-      const joke = { 
+      const joke = {
         title: req.body.title || req.joke.title,
         category: req.body.category || req.joke.category,
         joke: req.body.joke || req.joke.joke,
-        updatedAt: new Date(),
       };
-      Joke.findOneAndUpdate(
-        { id: req.param.id }, joke, { new: true, runValidators: true },
-        (err, jokeObject) => {
-          if (err) return next(err);
-          res.json({
-            success: true,
-            data: jokeObject,
-            message: 'Joke edited successfully.',
-          });
-        },
-      );
+      req.joke.update(req.joke, joke, (err, editedJoke) => {
+        if (err) return next(err);
+        res.json({
+          success: true,
+          data: editedJoke,
+          message: 'Joke edited successfully.',
+        });
+      });
     } else {
       return next(getError('Invalid joke objects, "joke is required".', 500));
     }
   },
-  
+
   /**
    * @description Delete a specific Joke
    */
   deleteJoke: (req, res, next) => {
-    Joke.findOneAndDelete(
-      { id: req.param.id }, (err) => {
-        if (err) return next(err, data);
-        res.json({
-          success: true,
-          data: data,
-          message: 'Joke deleted successfully.',
-        });
-        return next();
+    Joke.findOneAndDelete({ id: req.params.id }, (err, data) => {
+      if (err) return next(err);
+      res.json({
+        success: true,
+        data,
+        message: 'Joke deleted successfully.',
       });
+    });
   },
-  
+
   /**
    * @description Like a specific Joke
    */
   likeJoke: (req, res, next) => {
-    req.joke.like += 1;
-    Joke.findOneAndUpdate(
-      { id: req.param.id }, req.joke, { new: true, runValidators: true },
-      (err, jokeObject) => {
-        if (err) return next(err);
-        res.json({
-          success: true,
-          data: jokeObject,
-          message: 'Joke liked.',
-        });
-      },
-    );
+    const joke = {
+      likes: req.joke.likes + 1,
+    };
+    req.joke.update(req.joke, joke, (err, updatedJoke) => {
+      if (err) return next(err);
+      res.json({
+        success: true,
+        data: updatedJoke,
+        message: 'Joke liked.',
+      });
+    });
   },
-  
+
   /**
    * @description Filter jokes by category
    */
   filterJokesByCategory: (req, res, next) => {
-    Joke.find({ category: req.param.category })
+    Joke.where('category')
+      .equals(req.params.category)
       .sort({ createdAt: -1, likes: -1 })
       .exec((err, jokes) => {
         if (err) return next(err);
@@ -182,8 +175,39 @@ module.exports = {
           data: jokes,
           message: 'Filtered Jokes returned successfully.',
         });
-        return next();
       });
+  },
+
+  /**
+   * @description Reset Database and initialize jokes
+   */
+  resetDatabase: (req, res, next) => {
+    Joke.db.dropDatabase((err) => {
+      if (err) return next(err);
+      Joke.insertMany(initialJokes, (err2, jokesArray) => {
+        if (err2) return next(err2);
+        res.status(201)
+          .json({
+            success: true,
+            data: jokesArray,
+            message: 'Jokes Reset successfully.',
+          });
+      });
+    });
+  },
+
+  /**
+   * @description Searching for jokes
+   */
+  searchJokes: (req, res, next) => {
+    Joke.find({ $text: { $search: req.params.keywords } }, (err, jokes) => {
+      if (err) return next(err);
+      res.json({
+        success: true,
+        data: jokes,
+        message: 'Matched Jokes returned successfully.',
+      });
+    });
   },
 
   /**

@@ -15,7 +15,16 @@ const getError = (message, status) => {
   return err;
 };
 
+const devDatabase = 'mongodb://localhost:27017/joke';
+const prodDatabase = 'mongodb://joke-api:joke-api123@ds119085.mlab.com:19085/joke';
+
 module.exports = {
+
+  /**
+   * @description Return mongodb connection string based on NODE environment
+   */
+  getConnectionString: () => (process.env.NODE_ENV ? prodDatabase : devDatabase),
+
   validateJokes: (jokes) => {
     let jokesStatus = true;
     jokes.forEach((joke) => {
@@ -25,7 +34,9 @@ module.exports = {
     });
     return jokesStatus;
   },
+
   getError,
+
   /**
    * @description Validate file type parameter if it's equal to CSV or JSON
    */

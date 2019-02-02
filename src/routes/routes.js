@@ -4,7 +4,7 @@
  */
 
 const express = require('express');
-const { validateFileType } = require('../helpers/validations');
+const { validateFileType } = require('../helpers/logics');
 const {
   welcome,
   getJokes,
@@ -15,6 +15,8 @@ const {
   deleteJoke,
   likeJoke,
   filterJokesByCategory,
+  resetDatabase,
+  searchJokes,
 } = require('../controllers/jokeController');
 
 const router = express.Router();
@@ -41,6 +43,12 @@ router.get('/jokes', getJokes);
  * @description Create a joke or multiple jokes.
  */
 router.post('/jokes', createJokes);
+
+/**
+ * POST /api/jokes
+ * @description Clear database and reset documents jokes.
+ */
+router.post('/jokes/reset', resetDatabase);
 
 /**
  * GET /api/jokes/:id
@@ -100,12 +108,6 @@ router.get('/jokes/filter/:category', filterJokesByCategory);
  * GET /api/jokes/search/:keywords
  * @description Search and return Jokes matching the :keywords.
  */
-router.get('/jokes/search/:keywords', (req, res) => {
-  res.json({
-    success: true,
-    data: [],
-    message: 'Matched Jokes returned successfully.',
-  });
-});
+router.get('/jokes/search/:keywords', searchJokes);
 
 module.exports = router;

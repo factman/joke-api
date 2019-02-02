@@ -12,13 +12,13 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const routes = require('./routes/routes');
 const { errorHandler } = require('./controllers/jokeController');
-const { getError } = require('./helpers/validations');
+const { getError, getConnectionString } = require('./helpers/logics');
 
 // defining the express app
 const app = express();
 
 // creating connection to database
-mongoose.connect('mongodb://joke-api:joke-api123@ds119085.mlab.com:19085/joke', { useNewUrlParser: true });
+mongoose.connect(getConnectionString(), { useNewUrlParser: true });
 
 // save connection object
 const db = mongoose.connection;
