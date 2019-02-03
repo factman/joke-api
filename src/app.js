@@ -7,6 +7,9 @@
 
 // Importing Dependencies
 const express = require('express');
+import compression from "compression";
+import cors from "cors";
+import helmet from "helmet";
 const jsonParser = require('body-parser').json;
 const logger = require('morgan');
 const mongoose = require('mongoose');
@@ -33,18 +36,20 @@ db.once('open', () => {
   console.log('db connected successfully');
 });
 
+// helmet middleware implementation
+app.use(helmet());
+
 // logger middleware implementation
 app.use(logger('dev'));
 
 // json parser middleware implementation
-app.use(jsonParser());
+app.use(jsonParser({ limit: "10mb" }));
 
-// CORB
-app.all('/', (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    next()
-  });
+// cors middleware implementation
+app.use(cors());
+
+// compression middleware implementation
+app.use(compression());
 
 /**
  * GET /api
