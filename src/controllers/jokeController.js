@@ -38,7 +38,7 @@ module.exports = {
    */
   getJokes: (req, res, next) => {
     Joke.find({})
-      .sort({ createdAt: -1, likes: -1 })
+      .sort({ createdAt: -1 })
       .exec((err, jokes) => {
         if (err) return next(err);
         res.json({
