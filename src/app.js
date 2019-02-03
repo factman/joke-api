@@ -39,6 +39,13 @@ app.use(logger('dev'));
 // json parser middleware implementation
 app.use(jsonParser());
 
+// CORB
+app.all('/', (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next()
+  });
+
 /**
  * GET /api
  * @description API route middleware.
