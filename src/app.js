@@ -7,9 +7,9 @@
 
 // Importing Dependencies
 const express = require('express');
-import compression from "compression";
-import cors from "cors";
-import helmet from "helmet";
+const compression = require('compression');
+const cors = require('cors');
+const helmet = require('helmet');
 const jsonParser = require('body-parser').json;
 const logger = require('morgan');
 const mongoose = require('mongoose');
