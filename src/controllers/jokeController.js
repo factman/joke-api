@@ -54,6 +54,7 @@ module.exports = {
    */
   getJokeCategories: (req, res, next) => {
     Joke.find({}, 'category')
+      .sort({ category: 1 })
       .exec((err, categories) => {
         if (err) return next(err);
         const distinctCategories = [];
