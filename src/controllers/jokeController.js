@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const { Joke } = require('../models/jokeModel');
-const { validateJokes, getError, convertToCSV, convertToJSON } = require('../helpers/logics');
+const { validateJokes, formatJokes, getError, convertToCSV, convertToJSON } = require('../helpers/logics');
 const initialJokes = require('../../jokes.json');
 
 const version = process.env.VERSION || '1.0.0';
@@ -139,7 +139,7 @@ module.exports = {
    * @description Delete a specific Joke
    */
   deleteJoke: (req, res, next) => {
-    Joke.findOneAndDelete({ id: req.params.id }, (err, data) => {
+    Joke.findOneAndDelete({ _id: req.params.id }, (err, data) => {
       if (err) return next(err);
       res.json({
         success: true,
@@ -247,7 +247,7 @@ module.exports = {
         if (err) return next(err);
         res.json({
           success: true,
-          data: (req.params.type === 'JSON') ? jokes : convertToCSV(jokes),
+          data: (req.params.type === 'JSON') ? formatJokes(jokes) : convertToCSV(jokes),
           message: 'Jokes returned successfully.',
         });
       });

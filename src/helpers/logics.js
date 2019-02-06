@@ -58,7 +58,24 @@ module.exports = {
       CSV.push(`"${joke.title}"|"${joke.joke}"|"${joke.category}"|"${joke.likes}"`);
     });
     // eslint-disable-next-line quotes
-    return CSV.join("\n");
+    return CSV.join("\n\r");
+  },
+
+  /**
+   * @description Return array of formatted jokes
+   * @param {Array} jokes Array of jokes
+   */
+  formatJokes: (jokes) => {
+    const objs = [];
+    jokes.forEach((joke) => {
+      objs.push({
+        title: joke.title,
+        category: joke.category,
+        joke: joke.joke,
+        likes: joke.likes,
+      });
+    });
+    return objs;
   },
 
   /**
@@ -68,10 +85,11 @@ module.exports = {
   convertToJSON: (CSV) => {
     const obj = [];
     // eslint-disable-next-line quotes
-    const CSVLines = CSV[0].split("\n");
+    const CSVLines = CSV[0].split("\n\r");
     CSVLines.shift();
     CSVLines.forEach((jokeString) => {
       const jokeData = jokeString.split('|');
+      console.log(jokeData);
       obj.push({
         title: jokeData[0].substr(1, (jokeData[0].length - 2)),
         joke: jokeData[1].substr(1, (jokeData[1].length - 2)),
